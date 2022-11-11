@@ -22,8 +22,15 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
+
+
+
 function App() {
-  return <></>;
+
+
+  return (
+    <h1 className="text-3xl font-bold underline">CIAO FUCKING WORLD</h1>
+  );
 }
 
 export default App;
