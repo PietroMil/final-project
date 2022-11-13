@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   BrowserRouter as Router,
@@ -13,6 +13,7 @@ import { app } from './firebase-config';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth'
 
 
+
 function App() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,7 +21,7 @@ function App() {
 
   let navigate = useNavigate();
   const handleAction = (id: number) => {
-    console.log(id);
+    
     const authentication = getAuth(app);
       if (id === 2) {
         createUserWithEmailAndPassword(authentication, email, password)
@@ -28,8 +29,12 @@ function App() {
             navigate('/home')
             sessionStorage.setItem('Auth Token', response._tokenResponse.refreshToken)
         }).catch((error) => {
+          console.log(error);
           if (error.code === 'auth/email-already-in-use') {
             setError('Email Already in Use');
+          }
+          if (error.code === 'auth/weak-password') {
+            setError('Weak Password - 6 or more character need ');
           }
         })
      }
@@ -40,14 +45,18 @@ function App() {
           navigate('/home')
           sessionStorage.setItem('Auth Token', response._tokenResponse.refreshToken)
         }).catch((error) => {
-         
+          console.log(error);
           if(error.code === 'auth/wrong-password'){
-           console.log('Please check the Password');
+          
            setError('Please check the Password');
           }
           if(error.code === 'auth/user-not-found'){
-            console.log('Please check the email');
+            
             setError('Please check the email');
+          }
+          if(error.code === 'auth/invalid-email'){
+            
+            setError('Invalid Email');
           }
         })
     }

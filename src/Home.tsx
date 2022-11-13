@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import  { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export default function Home() {
@@ -9,7 +9,7 @@ export default function Home() {
     let navigate = useNavigate();
     useEffect(() => {
         let authToken = sessionStorage.getItem('Auth Token')
-        console.log(authToken)
+        
         if (authToken) {
             navigate('/home')
         }

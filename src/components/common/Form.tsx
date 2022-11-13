@@ -1,5 +1,3 @@
-import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom'
 import Button from './Button';
 import { Link, useLocation } from 'react-router-dom'
 
