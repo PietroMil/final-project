@@ -12,12 +12,15 @@ import {
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+
 function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   let navigate = useNavigate();
+
   const handleAction = (id: number) => {
     const authentication = getAuth(app);
     if (id === 2) {
@@ -28,8 +31,7 @@ function App() {
             "Auth Token",
             response._tokenResponse.refreshToken
           );
-          sessionStorage.setItem("email", response.user.email)
-          
+          sessionStorage.setItem("email", response.user.email);
         })
         .catch((error) => {
           console.log(error);
@@ -50,7 +52,7 @@ function App() {
             "Auth Token",
             response._tokenResponse.refreshToken
           );
-          sessionStorage.setItem("email", response.user.email)
+          sessionStorage.setItem("email", response.user.email);
         })
         .catch((error) => {
           console.log(error);
@@ -85,6 +87,7 @@ function App() {
               title="Login"
               setEmail={setEmail}
               setPassword={setPassword}
+              setError={error}
               handleAction={() => handleAction(1)}
             />
           }
@@ -96,20 +99,17 @@ function App() {
               title="Register"
               setEmail={setEmail}
               setPassword={setPassword}
+              setError={error}
               handleAction={() => handleAction(2)}
             />
           }
         />
+
         <Route path="/home" element={<Home />} />
       </Routes>
-
-      <div
-        className="w-full max-w-sm mt-6 m-auto p-4 mb-4 text-sm text-red-700 rounded-lg dark:bg-red-200 dark:text-red-800"
-        role="alert"
-      >
-        {error}
-      </div>
+      
     </>
+    
   );
 }
 
