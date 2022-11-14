@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./Home";
 import Form from "./components/common/Form";
+import Search from "./Search";
 import { useState } from "react";
-import { app } from "./firebase-config";
+import { auth } from "./firebase-config";
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -20,10 +21,10 @@ function App() {
 
   let navigate = useNavigate();
 
+
   const handleAction = (id: number) => {
-    const authentication = getAuth(app);
     if (id === 2) {
-      createUserWithEmailAndPassword(authentication, email, password)
+      createUserWithEmailAndPassword(auth, email, password)
         .then((response: any) => {
           navigate("/home");
           sessionStorage.setItem(
@@ -44,7 +45,7 @@ function App() {
     }
 
     if (id === 1) {
-      signInWithEmailAndPassword(authentication, email, password)
+      signInWithEmailAndPassword(auth, email, password)
         .then((response: any) => {
           navigate("/home");
           sessionStorage.setItem(
@@ -105,6 +106,7 @@ function App() {
         />
 
         <Route path="/home" element={<Home />} />
+        <Route path="/search" element={<Search />} />
       </Routes>
       
     </>

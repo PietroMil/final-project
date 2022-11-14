@@ -1,18 +1,15 @@
 import Button from "./Button";
 import { Link, useLocation } from "react-router-dom";
-import { getAuth } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { app } from "../../firebase-config";
+import { app, auth, provider } from "../../firebase-config";
 function Form({ title, setPassword, setEmail, setError, handleAction }: any) {
   let navigate = useNavigate();
   const location = useLocation();
 
   const handleGoogleAuth = () => {
-    const provider = new GoogleAuthProvider();
-
-    const auth = getAuth(app);
+   
 
     signInWithPopup(auth, provider)
       .then((result: any) => {
