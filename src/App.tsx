@@ -1,35 +1,115 @@
-import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
-
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyA4JGoVpXJOzK0hynV2spYUHuHoJC6cATs",
-  authDomain: "tv-maze-app-pietro-milanese.firebaseapp.com",
-  projectId: "tv-maze-app-pietro-milanese",
-  storageBucket: "tv-maze-app-pietro-milanese.appspot.com",
-  messagingSenderId: "622772533009",
-  appId: "1:622772533009:web:7f3c0789d901f672d4beb0",
-  measurementId: "G-2QBMKJTD4T",
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./Home";
+import Form from "./components/common/Form";
+import { useState } from "react";
+import { app } from "./firebase-config";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
 
 
 
 function App() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
+  let navigate = useNavigate();
+
+  const handleAction = (id: number) => {
+    const authentication = getAuth(app);
+    if (id === 2) {
+      createUserWithEmailAndPassword(authentication, email, password)
+        .then((response: any) => {
+          navigate("/home");
+          sessionStorage.setItem(
+            "Auth Token",
+            response._tokenResponse.refreshToken
+          );
+          sessionStorage.setItem("email", response.user.email);
+        })
+        .catch((error) => {
+          console.log(error);
+          if (error.code === "auth/email-already-in-use") {
+            setError("Email Already in Use");
+          }
+          if (error.code === "auth/weak-password") {
+            setError("Weak Password - 6 or more character need ");
+          }
+        });
+    }
+
+    if (id === 1) {
+      signInWithEmailAndPassword(authentication, email, password)
+        .then((response: any) => {
+          navigate("/home");
+          sessionStorage.setItem(
+            "Auth Token",
+            response._tokenResponse.refreshToken
+          );
+          sessionStorage.setItem("email", response.user.email);
+        })
+        .catch((error) => {
+          console.log(error);
+          if (error.code === "auth/wrong-password") {
+            setError("Please check the Password");
+          }
+          if (error.code === "auth/user-not-found") {
+            setError("Please check the email");
+          }
+          if (error.code === "auth/invalid-email") {
+            setError("Invalid Email");
+          }
+        });
+    }
+  };
+
+  useEffect(() => {
+    let authToken = sessionStorage.getItem("Auth Token");
+
+    if (authToken) {
+      navigate("/home");
+    }
+  }, []);
 
   return (
-    <h1 className="text-3xl font-bold underline">CIAO FUCKING WORLD</h1>
+    <>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Form
+              title="Login"
+              setEmail={setEmail}
+              setPassword={setPassword}
+              setError={error}
+              handleAction={() => handleAction(1)}
+            />
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <Form
+              title="Register"
+              setEmail={setEmail}
+              setPassword={setPassword}
+              setError={error}
+              handleAction={() => handleAction(2)}
+            />
+          }
+        />
+
+        <Route path="/home" element={<Home />} />
+      </Routes>
+      
+    </>
+    
   );
 }
 
