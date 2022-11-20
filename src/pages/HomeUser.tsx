@@ -1,51 +1,52 @@
-import { getAuth } from "firebase/auth";
+import { getAuth, signOut } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { app, auth } from "./firebase-config";
-import { signOut } from "firebase/auth";
-import Search from "./Search";
-import "./Header.css";
-export default function Home() {
-  console.log(auth.currentUser?.uid);
+import React from "react";
+import "../Header.css";
+import { getDatabase, ref, child, get, onValue } from "firebase/database";
+import { initializeApp } from "firebase/app";
+import { config } from "../config/config";
+export interface InputHomePageProps {}
+
+const HomeUser: React.FunctionComponent<InputHomePageProps> = () => {
+    
+
+  const auth = getAuth();
+  const name = sessionStorage.getItem("name") || auth.currentUser?.displayName
+
+  const app = initializeApp(config.firebaseConfig)
+ 
+
+  // const dbRef = ref(getDatabase(app));
+  // get(child(dbRef, `${auth.currentUser?.uid + '/userFavorites'}`)).then((snapshot) => {
+  //   if (snapshot.exists()) {
+  //     console.log(snapshot.val());
+  //   } else {
+  //     console.log("No data available");
+  //   }
+  // }).catch((error) => {
+  //   console.error(error);
+  // });
   const [isNavOpen, setIsNavOpen] = useState(false);
 
-  const handleLogout = () => {
-    const auth = getAuth(app);
-    signOut(auth)
-      .then(() => {
-        // Sign-out successful.
-        sessionStorage.removeItem("Auth Token");
-        sessionStorage.removeItem("email");
-        navigate("/");
-      })
-      .catch((error) => {
-        // An error happened.
-      });
-  };
+  
+    const db = getDatabase(app);
+    const favoritesCount = ref(db, `${auth.currentUser?.uid + '/userFavorites'}`)
 
-  let navigate = useNavigate();
-  useEffect(() => {
-    console.log(sessionStorage);
-    const authentication = getAuth(app);
-    console.log(authentication);
-    let authToken = sessionStorage.getItem("Auth Token");
+useEffect(()=> {
+  onValue(favoritesCount, (snapshot) => {
+  const data = snapshot.val()
+  console.log(data)
+})}, [])
 
-    if (authToken) {
-      navigate("/home");
-    }
+    
 
-    if (!authToken) {
-      navigate("/register");
-    }
-  }, []);
-
-  let name = sessionStorage.getItem("email");
 
   return (
     <>
+    
       <div className="font-bold bg-purple-500 flex items-center justify-between border-b border-gray-400 p-4">
         <div className="flex text-white">
-          {" "}
+        
           <svg
             className="fill-white h-8 w-8 mr-2"
             width="54"
@@ -126,7 +127,12 @@ export default function Home() {
                 </li>
                 <li>
                   <a
-                    onClick={handleLogout}
+                    onClick={() => {
+                        signOut(auth);
+                        sessionStorage.removeItem("name");
+                        sessionStorage.removeItem("Auth Token");
+                        sessionStorage.removeItem("email");
+                      }}
                     className="cursor-pointer inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0"
                   >
                     LogOut
@@ -151,7 +157,12 @@ export default function Home() {
             </li>
             <li>
               <a
-                onClick={handleLogout}
+               onClick={() => {
+                signOut(auth);
+                sessionStorage.removeItem("name");
+                sessionStorage.removeItem("Auth Token");
+                sessionStorage.removeItem("email");
+              }}
                 className=" cursor-pointer inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0"
               >
                 LogOut
@@ -160,7 +171,10 @@ export default function Home() {
           </ul>
         </nav>
       </div>
-      <Search></Search>
+
+
     </>
   );
-}
+};
+
+export default HomeUser;
