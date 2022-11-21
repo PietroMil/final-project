@@ -28,6 +28,7 @@ const handleAction = (): void => {
           .then((response) => {
             sessionStorage.setItem("Auth Token", response.user.uid);
             sessionStorage.setItem("email", response.user.email!);
+            sessionStorage.setItem("name", response.user.displayName!);
             navigate("/");
           })
           .catch((error) => {

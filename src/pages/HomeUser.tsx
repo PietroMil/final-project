@@ -5,37 +5,28 @@ import "../Header.css";
 import { getDatabase, ref, child, get, onValue } from "firebase/database";
 import { initializeApp } from "firebase/app";
 import { config } from "../config/config";
+import Search from "../components/common/Search";
 export interface InputHomePageProps {}
 
 const HomeUser: React.FunctionComponent<InputHomePageProps> = () => {
     
-
   const auth = getAuth();
   const name = sessionStorage.getItem("name") || auth.currentUser?.displayName
 
   const app = initializeApp(config.firebaseConfig)
+  const db = getDatabase(app);
+  const favoritesCount = ref(db, `${auth.currentUser?.uid}` + '/')
+
+  const [isNavOpen, setIsNavOpen] = useState(false);
+  
  
 
-  // const dbRef = ref(getDatabase(app));
-  // get(child(dbRef, `${auth.currentUser?.uid + '/userFavorites'}`)).then((snapshot) => {
-  //   if (snapshot.exists()) {
-  //     console.log(snapshot.val());
-  //   } else {
-  //     console.log("No data available");
-  //   }
-  // }).catch((error) => {
-  //   console.error(error);
-  // });
-  const [isNavOpen, setIsNavOpen] = useState(false);
-
-  
-    const db = getDatabase(app);
-    const favoritesCount = ref(db, `${auth.currentUser?.uid + '/userFavorites'}`)
-
 useEffect(()=> {
-  onValue(favoritesCount, (snapshot) => {
-  const data = snapshot.val()
-  console.log(data)
+onValue(favoritesCount, (snapshot) => {
+const data = snapshot.val()
+let newObj = {...data}
+console.log(newObj)
+
 })}, [])
 
     
@@ -171,7 +162,7 @@ useEffect(()=> {
           </ul>
         </nav>
       </div>
-
+<Search />
 
     </>
   );

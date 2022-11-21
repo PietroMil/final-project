@@ -7,6 +7,7 @@ import { initializeApp } from "firebase/app";
 import { config } from "./config/config";
 import AuthRoute from "./components/auth/AuthRoute"
 
+
 initializeApp(config.firebaseConfig)
 
 

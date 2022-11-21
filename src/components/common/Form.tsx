@@ -1,8 +1,6 @@
 import Button from "./Button";
 import { Link, useLocation } from "react-router-dom";
-import PropTypes from 'prop-types';
-import React from "react";
-import { InputLoginProps } from "../../pages/LoginPage";
+
 
 export interface InputFormProps {
   title: string,
