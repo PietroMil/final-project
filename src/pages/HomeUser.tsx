@@ -24,8 +24,8 @@ const HomeUser: React.FunctionComponent<InputHomePageProps> = () => {
 useEffect(()=> {
 onValue(favoritesCount, (snapshot) => {
 const data = snapshot.val()
-let newObj = {...data}
-console.log(newObj)
+
+console.log(data)
 
 })}, [])
 
