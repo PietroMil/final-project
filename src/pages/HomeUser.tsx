@@ -13,21 +13,18 @@ const HomeUser: React.FunctionComponent<InputHomePageProps> = () => {
   const auth = getAuth();
   const name = sessionStorage.getItem("name") || auth.currentUser?.displayName
 
-  const app = initializeApp(config.firebaseConfig)
-  const db = getDatabase(app);
-  const favoritesCount = ref(db, `${auth.currentUser?.uid}` + '/')
-
-  const [isNavOpen, setIsNavOpen] = useState(false);
   
  
 
+
+  const [isNavOpen, setIsNavOpen] = useState(false);
+  
+
+
 useEffect(()=> {
-onValue(favoritesCount, (snapshot) => {
-const data = snapshot.val()
 
-console.log(data)
 
-})}, [])
+}, [])
 
     
 
@@ -123,6 +120,7 @@ console.log(data)
                         sessionStorage.removeItem("name");
                         sessionStorage.removeItem("Auth Token");
                         sessionStorage.removeItem("email");
+                        localStorage.removeItem("favorites");
                       }}
                     className="cursor-pointer inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0"
                   >
