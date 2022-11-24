@@ -1,6 +1,6 @@
 import { getShowsBySearch, ShowType } from "../API/index";
 import { useCallback, useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { initializeApp } from "firebase/app";
 import { config } from "../../config/config";
 import { getDatabase, onChildAdded, ref, set, update, onValue, } from "firebase/database";
@@ -36,7 +36,7 @@ function Search() {
   
   const db = getDatabase(app);
   const favoritesCount = ref(db, '/'+ uid + '/')
-  
+
   onValue(favoritesCount, (snapshot: any) => {
     const data = snapshot.val()
    
@@ -69,8 +69,18 @@ function Search() {
     return (
       <>
         <div className="py-3">
-            <div className="py-3"><p className="text-lg text-center">Hello, <i className="text-xl font-bold underline decoration-indigo-500">{sessionStorage.getItem("name") || sessionStorage.getItem("email")}</i> </p>
-            <p className="text-base text-center">search for a movie, see detail and add to your favorites</p></div>
+          <div className="py-3">
+            <p className="text-lg text-center">
+              Hello,{" "}
+              <i className="text-xl font-bold underline decoration-indigo-500">
+                {sessionStorage.getItem("name") ||
+                  sessionStorage.getItem("email")}
+              </i>{" "}
+            </p>
+            <p className="text-base text-center">
+              search for a movie, see detail and add to your favorites
+            </p>
+          </div>
           <label
             htmlFor="first_name"
             className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -114,11 +124,16 @@ function Search() {
           </div>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6">
-        {shows.map((el) => (<SearchCards key={el.id} id={el.id} title={el.title} image={el.image} ></SearchCards>))}
-        
-      
-      </div>
-      
+          {shows.map((el) => (
+            <SearchCards
+          key={el.id}
+          id={el.id}
+          title={el.title}
+          image={el.image}
+        ></SearchCards>
+            
+          ))}
+        </div>
       </>
     );
   }

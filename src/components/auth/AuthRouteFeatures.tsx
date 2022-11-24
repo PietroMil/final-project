@@ -3,11 +3,11 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 
-export interface InputAuthRouteProps {
+export interface InputAuthRouteFeaturesProps {
     children?: React.ReactNode;
 };
 
-const AuthRoute: React.FunctionComponent<InputAuthRouteProps> = (props) => {
+const AuthRouteFeatures: React.FunctionComponent<InputAuthRouteFeaturesProps> = (props) => {
     const { children } = props;
     const auth = getAuth();
     const navigate = useNavigate();
@@ -19,14 +19,12 @@ const AuthRoute: React.FunctionComponent<InputAuthRouteProps> = (props) => {
         const AuthCheck = onAuthStateChanged(auth, (user) => {
             if(user) {
                 setLoading(false)
-                navigate('/') 
+                navigate('/features') 
                 
             } else {
                 navigate('/login')
             }
         });
-
-       
 
 
         return () => AuthCheck() 
@@ -48,4 +46,4 @@ const AuthRoute: React.FunctionComponent<InputAuthRouteProps> = (props) => {
 
 }
 
-export default AuthRoute
+export default AuthRouteFeatures

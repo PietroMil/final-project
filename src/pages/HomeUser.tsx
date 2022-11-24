@@ -1,11 +1,10 @@
 import { getAuth, signOut } from "firebase/auth";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import React from "react";
 import "../Header.css";
-import { getDatabase, ref, child, get, onValue } from "firebase/database";
-import { initializeApp } from "firebase/app";
-import { config } from "../config/config";
 import Search from "../components/common/Search";
+
 export interface InputHomePageProps {}
 
 const HomeUser: React.FunctionComponent<InputHomePageProps> = () => {
@@ -13,21 +12,14 @@ const HomeUser: React.FunctionComponent<InputHomePageProps> = () => {
   const auth = getAuth();
   const name = sessionStorage.getItem("name") || auth.currentUser?.displayName
 
-  
- 
-
-
   const [isNavOpen, setIsNavOpen] = useState(false);
-  
-
-
+  const navigate = useNavigate()
 useEffect(()=> {
 
 
 }, [])
 
-    
-
+  
 
   return (
     <>
@@ -84,7 +76,7 @@ useEffect(()=> {
               <ul className="text-white flex flex-col items-center justify-center min-h-[250px]">
                 <li className="mt-6">
                   <div className="flex text-white">
-                    {" "}
+                    
                     <svg
                       className="fill-white h-8 w-8 mr-2"
                       width="54"
@@ -100,13 +92,7 @@ useEffect(()=> {
                   </div>
                 </li>
                 <li className=" my-2 uppercase">
-                  <a href="/about">About</a>
-                </li>
-                <li className=" my-2 uppercase">
-                  <a href="/portfolio">Portfolio</a>
-                </li>
-                <li className=" my-2 uppercase">
-                  <a href="/contact">Contact</a>
+                <button onClick={() => navigate('/features')}>Features</button>
                 </li>
                 <li>
                   <span className="font-semibold text-xl tracking-tight">
@@ -133,13 +119,7 @@ useEffect(()=> {
 
           <ul className="text-white DESKTOP-MENU hidden space-x-8 lg:flex">
             <li>
-              <a href="/about">About</a>
-            </li>
-            <li>
-              <a href="/portfolio">Portfolio</a>
-            </li>
-            <li>
-              <a href="/contact">Contact</a>
+            <button onClick={() => navigate('/features')}>Features</button>
             </li>
             <li>
               <span className="font-semibold">{name}</span>
@@ -161,6 +141,7 @@ useEffect(()=> {
         </nav>
       </div>
 <Search />
+
 
     </>
   );

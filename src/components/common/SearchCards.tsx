@@ -47,8 +47,6 @@ function SearchCards({ id, title, image }: any) {
     storage.forEach((element: any) => {
       
       if (element.id == id) {
-        
-    
         setIsfavorites(true);
         console.log(element.id)
       }
@@ -57,14 +55,22 @@ function SearchCards({ id, title, image }: any) {
     );
   }, []);
 
+
+
+ 
+
   return (
     <>
-    <div>
+   
       <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
-        <a href="#">
-          <img className="rounded-t-lg" src={image || "/logo192.png"} alt="" />
+      <Link
+            key={id}
+            to={id.toString()}
+            style={{ textDecoration: "none" }}
+          >
+          <img className="rounded-t-lg" src={image || "/logo192.png"} alt="" /></Link>
           <p>{id}</p>
-        </a>
+        
         <div className="p-2">
           <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
             {title}
@@ -111,7 +117,7 @@ function SearchCards({ id, title, image }: any) {
           )}
         </div>
       </div>
-      </div>
+      
     </>
   );
 }

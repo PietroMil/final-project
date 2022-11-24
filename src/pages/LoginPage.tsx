@@ -17,7 +17,6 @@ const LoginPage: React.FunctionComponent<InputLoginProps> = (props) => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [error, setError] = useState<string>("");
-    const [loading, setLoading] = useState<boolean>(true);
 
 //email and password
 const handleAction = (): void => {
