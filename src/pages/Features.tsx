@@ -18,7 +18,7 @@ const Features = () => {
   return  (
     <>
      PREFERITI
-
+     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6">
     { storage.map((el: any) => (
 
 <div className="flex flex-col items-center bg-white border rounded-lg shadow-md md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
@@ -32,7 +32,7 @@ const Features = () => {
     
     
     ))}
-
+</div>
       </>
 )};
 
