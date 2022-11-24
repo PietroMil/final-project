@@ -62,20 +62,16 @@ function SearchCards({ id, title, image }: any) {
   return (
     <>
    
-      <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
+      <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700">
       <Link
             key={id}
             to={id.toString()}
             style={{ textDecoration: "none" }}
           >
           <img className="rounded-t-lg" src={image || "/logo192.png"} alt="" /></Link>
-          <p>{id}</p>
+          {/* <p>{id}</p> */}
         
-        <div className="p-2">
-          <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-            {title}
-          </h5>
-          <p>Detail </p>
+        
           {isFavorites ? (
             <button onClick={() => handleRemoveFavorites(id)}>
               <svg
@@ -115,7 +111,11 @@ function SearchCards({ id, title, image }: any) {
               </svg>
             </button>
           )}
-        </div>
+        <div className="p-2">
+          <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+            {title}
+          </h5>
+          </div>
       </div>
       
     </>
