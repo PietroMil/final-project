@@ -11,6 +11,7 @@ export interface InputLoginProps {}
 
 const LoginPage: React.FunctionComponent<InputLoginProps> = (props) => {
     const auth = getAuth()
+    console.log(auth)
     const navigate = useNavigate()
     const [authing, setAuthing] = useState(false);
 
@@ -28,6 +29,8 @@ const handleAction = (): void => {
             sessionStorage.setItem("Auth Token", response.user.uid);
             sessionStorage.setItem("email", response.user.email!);
             sessionStorage.setItem("name", response.user.displayName!);
+            const user = {uid: response.user.uid, displayName: response.user.displayName}
+            localStorage.setItem('user', JSON.stringify(user))
             navigate("/");
           })
           .catch((error) => {
@@ -53,6 +56,8 @@ console.log(authing)
         signInWithPopup(auth, new GoogleAuthProvider())
             .then((response) => {
               sessionStorage.setItem("name", auth.currentUser?.displayName!)
+              const user = {uid: response.user.uid, displayName: response.user.displayName}
+            localStorage.setItem('user', JSON.stringify(user))
                 navigate('/')
             })
             .catch((error) => {

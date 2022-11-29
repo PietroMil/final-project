@@ -1,3 +1,4 @@
+import { initializeApp } from "firebase/app";
 export const config = {
 
     firebaseConfig: {
@@ -12,3 +13,5 @@ export const config = {
         measurementId: "G-2QBMKJTD4T",
       }
 }
+
+export const app = initializeApp(config.firebaseConfig);

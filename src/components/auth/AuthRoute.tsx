@@ -11,6 +11,7 @@ const AuthRoute: React.FunctionComponent<InputAuthRouteProps> = (props) => {
     const { children } = props;
     const auth = getAuth();
     const navigate = useNavigate();
+    console.log(auth)
 
     const [loading, setLoading] = useState(false);
 

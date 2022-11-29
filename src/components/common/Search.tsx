@@ -16,6 +16,8 @@ function Search() {
   const handleOnSearchChange = useCallback(
     (query: string) => {
       setCurrentSearch({ search: query });
+      localStorage.setItem('query', query)
+      
     },
     [setCurrentSearch]
   );
@@ -64,17 +66,17 @@ function Search() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
     
+    const name: any = localStorage.getItem('user')
     
   
     return (
       <>
-        <div className="py-3">
+        <div className="py-3 dark:text-white">
           <div className="py-3">
             <p className="text-lg text-center">
               Hello,{" "}
               <i className="text-xl font-bold underline decoration-indigo-500">
-                {sessionStorage.getItem("name") ||
-                  sessionStorage.getItem("email")}
+                {JSON.parse(name).displayName}
               </i>{" "}
             </p>
             <p className="text-base text-center">
@@ -87,7 +89,7 @@ function Search() {
           >
             Search
           </label>
-          <div className="relative">
+        <div className="grid px-4">  <div className="relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <svg
                 aria-hidden="true"
@@ -121,9 +123,9 @@ function Search() {
             >
               Search
             </button>
-          </div>
+          </div></div>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 px-4">
           {shows.map((el) => (
             <SearchCards
           key={el.id}

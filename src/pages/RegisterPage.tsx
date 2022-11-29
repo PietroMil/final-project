@@ -24,18 +24,14 @@ const RegisterPage: React.FunctionComponent<InputLoginProps> = (props) => {
 const handleAction = () => {
      
         createUserWithEmailAndPassword(auth, email, password)
-          .then((response) => {
+          .then(async (response) => {
             sessionStorage.setItem("Auth Token", response.user.uid);
             sessionStorage.setItem("email", response.user.email!);
-            updateProfile(auth.currentUser!, {
+            await updateProfile(auth.currentUser!, {
               displayName: username,
-            }).then(() => {
-             
-             console.log(auth.currentUser?.displayName)
-             sessionStorage.setItem("name", auth.currentUser?.displayName!)
-            }).catch((error) => {
-              // An error occurred
-            });
+            })
+            const { uid, displayName } = response.user
+            localStorage.setItem('user', JSON.stringify({uid, displayName}))
             
             navigate("/");      
    

@@ -1,18 +1,15 @@
-import { getShowsBySearch, ShowType } from "../API/index";
-import { useCallback, useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import {  useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { initializeApp } from "firebase/app";
 import { config } from "../../config/config";
 import {
   getDatabase,
-  onChildAdded,
   ref,
-  set,
   update,
-  onValue,
   remove,
 } from "firebase/database";
 import { getAuth } from "firebase/auth";
+import DetailPage from "../../pages/DetailPage";
 
 function SearchCards({ id, title, image }: any) {
   const auth = getAuth();
@@ -62,7 +59,7 @@ function SearchCards({ id, title, image }: any) {
   return (
     <>
    
-      <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700">
+      <div className="max-w-sm bg-white  rounded-lg shadow-md hover:bg-gray-100 dark:bg-gray-800 py-3">
       <Link
             key={id}
             to={id.toString()}
