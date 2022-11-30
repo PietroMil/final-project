@@ -1,0 +1,32 @@
+[debug] [2022-11-30T09:08:34.677Z] ----------------------------------------------------------------------
+[debug] [2022-11-30T09:08:34.679Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\ICTS21-23.289\Desktop\react\PROGETTOFINALE\my-app\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2022-11-30T09:08:34.680Z] CLI Version:   11.16.0
+[debug] [2022-11-30T09:08:34.680Z] Platform:      win32
+[debug] [2022-11-30T09:08:34.680Z] Node Version:  v16.13.0
+[debug] [2022-11-30T09:08:34.681Z] Time:          Wed Nov 30 2022 10:08:34 GMT+0100 (Ora standard dell’Europa centrale)
+[debug] [2022-11-30T09:08:34.681Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-11-30T09:08:34.773Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-11-30T09:08:34.773Z] > authorizing via signed-in user (pietro.milanese@edu.itspiemonte.it)
+[debug] [2022-11-30T09:08:34.774Z] [iam] checking project tv-maze-app-pietro-milanese for permissions ["firebase.projects.get","firebasedatabase.instances.update","firebasehosting.sites.update"]
+[debug] [2022-11-30T09:08:34.776Z] > refreshing access token with scopes: []
+[debug] [2022-11-30T09:08:34.779Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2022-11-30T09:08:34.779Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2022-11-30T09:08:55.811Z] [iam] error while checking permissions, command may fail: FirebaseError: Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2022-11-30T09:08:55.813Z] > refreshing access token with scopes: []
+[debug] [2022-11-30T09:08:55.813Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2022-11-30T09:08:55.813Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2022-11-30T09:08:55.893Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 400
+[debug] [2022-11-30T09:08:55.893Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2022-11-30T09:08:55.894Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/tv-maze-app-pietro-milanese [none]
+[debug] [2022-11-30T09:08:55.965Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/tv-maze-app-pietro-milanese 401
+[debug] [2022-11-30T09:08:55.965Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/tv-maze-app-pietro-milanese {"error":{"code":401,"message":"Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.","status":"UNAUTHENTICATED"}}
+[debug] [2022-11-30T09:08:55.966Z] HTTP Error: 401, Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.
+[debug] [2022-11-30T09:09:00.974Z] Error: Timed out.
+    at Timeout._onTimeout (C:\Users\ICTS21-23.289\Desktop\react\PROGETTOFINALE\my-app\node_modules\firebase-tools\lib\utils.js:253:49)
+    at listOnTimeout (node:internal/timers:557:17)
+    at processTimers (node:internal/timers:500:7)
+[error] 
+[error] Error: An unexpected error has occurred.

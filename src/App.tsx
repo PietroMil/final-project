@@ -1,17 +1,18 @@
-import "./App.css";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./Home";
-import Form from "./components/common/Form";
-import { useState } from "react";
-import { app } from "./firebase-config";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-} from "firebase/auth";
+import React, { useEffect } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import HomeUser from "./pages/HomeUser";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import { initializeApp } from "firebase/app";
+import { config, app } from "./config/config";
+import DetailPage from "./pages/DetailPage";
+import Favorites from "./pages/Favorites";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import ProtectedRoute from "./components/auth/ProtectedPage";
+import { selecTheme } from "./theme/theme.slice";
+import { useAppSelector } from "./store/hooks";
 
+initializeApp(config.firebaseConfig);
 
 
 function App() {
@@ -19,98 +20,55 @@ function App() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  let navigate = useNavigate();
+//motoring user status
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const { uid, displayName } = user;
+    const currentUser = { uid, displayName };
+    localStorage.setItem("user", JSON.stringify(currentUser));
+  } else {
+    localStorage.setItem("user", "");
+  }
+});
 
-  const handleAction = (id: number) => {
-    const authentication = getAuth(app);
-    if (id === 2) {
-      createUserWithEmailAndPassword(authentication, email, password)
-        .then((response: any) => {
-          navigate("/home");
-          sessionStorage.setItem(
-            "Auth Token",
-            response._tokenResponse.refreshToken
-          );
-          sessionStorage.setItem("email", response.user.email);
-        })
-        .catch((error) => {
-          console.log(error);
-          if (error.code === "auth/email-already-in-use") {
-            setError("Email Already in Use");
-          }
-          if (error.code === "auth/weak-password") {
-            setError("Weak Password - 6 or more character need ");
-          }
-        });
-    }
+export interface InputAppProps {}
 
-    if (id === 1) {
-      signInWithEmailAndPassword(authentication, email, password)
-        .then((response: any) => {
-          navigate("/home");
-          sessionStorage.setItem(
-            "Auth Token",
-            response._tokenResponse.refreshToken
-          );
-          sessionStorage.setItem("email", response.user.email);
-        })
-        .catch((error) => {
-          console.log(error);
-          if (error.code === "auth/wrong-password") {
-            setError("Please check the Password");
-          }
-          if (error.code === "auth/user-not-found") {
-            setError("Please check the email");
-          }
-          if (error.code === "auth/invalid-email") {
-            setError("Invalid Email");
-          }
-        });
-    }
-  };
+const App: React.FunctionComponent<InputAppProps> = () => {
+  const theme = useAppSelector(selecTheme);
 
   useEffect(() => {
-    let authToken = sessionStorage.getItem("Auth Token");
-
-    if (authToken) {
-      navigate("/home");
+    if (theme === "dark") {
+      document.documentElement.classList.add("bg-black");
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("bg-black");
+      document.documentElement.classList.remove("dark");
     }
-  }, []);
+  }, [theme]);
 
   return (
-    <>
+    <BrowserRouter>
       <Routes>
+        <Route path="/" element={<HomeUser />} />
         <Route
-          path="/"
+          path="/:showId"
           element={
-            <Form
-              title="Login"
-              setEmail={setEmail}
-              setPassword={setPassword}
-              setError={error}
-              handleAction={() => handleAction(1)}
-            />
-          }
-        />
-        <Route
-          path="/register"
-          element={
-            <Form
-              title="Register"
-              setEmail={setEmail}
-              setPassword={setPassword}
-              setError={error}
-              handleAction={() => handleAction(2)}
-            />
+            <ProtectedRoute
+              user={JSON.parse(
+                localStorage.getItem("user") || '{"uid": false}'
+              )}
+            >
+              <DetailPage />
+            </ProtectedRoute>
           }
         />
 
-        <Route path="/home" element={<Home />} />
+        <Route path="/favorites" element={<Favorites />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
       </Routes>
-      
-    </>
-    
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
