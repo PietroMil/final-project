@@ -1,92 +1,64 @@
 import React, { useState } from "react";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import {
-  signInWithEmailAndPassword,
-
-} from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import Form from "../components/common/Form";
 
 export interface InputLoginProps {}
 
 const LoginPage: React.FunctionComponent<InputLoginProps> = (props) => {
-    const auth = getAuth()
-    console.log(auth)
-    const navigate = useNavigate()
-    const [authing, setAuthing] = useState(false);
+  const auth = getAuth();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string>("");
 
-    const [email, setEmail] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
-    const [error, setError] = useState<string>("");
+  //email and password
+  const handleAction = (): void => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        navigate("/");
+      })
+      .catch((error) => {
+        if (error.code === "auth/wrong-password") {
+          setError("Wrong Password - Please check the Password");
+        }
+        if (error.code === "auth/user-not-found") {
+          setError("User not found - Please check the email or register");
+        }
+        if (error.code === "auth/invalid-email") {
+          setError("Invalid Email");
+        }
+      });
+  };
 
-//email and password
-const handleAction = (): void => {
-      
-       
-      
-        signInWithEmailAndPassword(auth, email, password)
-          .then((response) => {
-            sessionStorage.setItem("Auth Token", response.user.uid);
-            sessionStorage.setItem("email", response.user.email!);
-            sessionStorage.setItem("name", response.user.displayName!);
-            const user = {uid: response.user.uid, displayName: response.user.displayName}
-            localStorage.setItem('user', JSON.stringify(user))
-            navigate("/");
-          })
-          .catch((error) => {
-            console.log(error);
-            if (error.code === "auth/wrong-password") {
-              setError("Wrong Password - Please check the Password");
-            }
-            if (error.code === "auth/user-not-found") {
-              setError("User not found - Please check the email or register");
-            }
-            if (error.code === "auth/invalid-email") {
-              setError("Invalid Email");
-            }
-          });
-      }
-    
+  //google
+  const signInwithGoogle = async () => {
+    signInWithPopup(auth, new GoogleAuthProvider())
+      .then(() => {
+        navigate("/");
+      })
+      .catch(() => {});
+  };
 
-
-//google
-    const signInwithGoogle = async () => {
-        setAuthing(true)
-console.log(authing)
-        signInWithPopup(auth, new GoogleAuthProvider())
-            .then((response) => {
-              sessionStorage.setItem("name", auth.currentUser?.displayName!)
-              const user = {uid: response.user.uid, displayName: response.user.displayName}
-            localStorage.setItem('user', JSON.stringify(user))
-                navigate('/')
-            })
-            .catch((error) => {
-                setAuthing(false)
-            })
-    }
-    
-    return (
-        
-        <div>
-          <div>
-            <Form
-              title="Login"
-              setEmail={setEmail}
-              setPassword={setPassword}
-              setError={error}
-              handleAction={() => handleAction()}
-            />
-          
-    
-          </div>
-          <div className="w-full max-w-sm mt-6 m-auto">
+  return (
+    <div>
+      <div>
+        <Form
+          title="Login"
+          setEmail={setEmail}
+          setPassword={setPassword}
+          setError={error}
+          handleAction={() => handleAction()}
+        />
+      </div>
+      <div className="w-full max-w-sm mt-6 m-auto">
         <div className="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5">
           <p className="text-center font-semibold mx-4 mb-0">OR</p>
         </div>
-       
       </div>
-          <div className="w-full max-w-sm mt-6 m-auto">
-            <button
+      <div className="w-full max-w-sm mt-6 m-auto">
+        <button
           onClick={signInwithGoogle}
           className="w-full max-w-sm mt-6 m-auto m-auto px-6 py-3 mt-4 font-semibold text-gray-900 bg-white border-2 border-gray-500 rounded-md shadow outline-none hover:bg-blue-50 hover:border-blue-400 focus:outline-none"
         >
@@ -116,10 +88,9 @@ console.log(authing)
           </svg>
           Sign in with Google
         </button>
-        </div>
-        </div>
-        
-    )
-}
+      </div>
+    </div>
+  );
+};
 
-export default LoginPage
+export default LoginPage;

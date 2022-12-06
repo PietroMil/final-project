@@ -4,28 +4,14 @@ import HomeUser from "./pages/HomeUser";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import { initializeApp } from "firebase/app";
-import { config, app } from "./config/config";
+import { config } from "./config/config";
 import DetailPage from "./pages/DetailPage";
 import Favorites from "./pages/Favorites";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import ProtectedRoute from "./components/auth/ProtectedPage";
 import { selecTheme } from "./theme/theme.slice";
 import { useAppSelector } from "./store/hooks";
 
 initializeApp(config.firebaseConfig);
-
-const auth = getAuth(app);
-
-//motoring user status
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    const { uid, displayName } = user;
-    const currentUser = { uid, displayName };
-    localStorage.setItem("user", JSON.stringify(currentUser));
-  } else {
-    localStorage.setItem("user", "");
-  }
-});
 
 export interface InputAppProps {}
 
@@ -45,15 +31,18 @@ const App: React.FunctionComponent<InputAppProps> = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<HomeUser />} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <HomeUser />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/:showId"
           element={
-            <ProtectedRoute
-              user={JSON.parse(
-                localStorage.getItem("user") || '{"uid": false}'
-              )}
-            >
+            <ProtectedRoute>
               <DetailPage />
             </ProtectedRoute>
           }

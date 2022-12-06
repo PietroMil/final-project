@@ -1,23 +1,22 @@
 import { getShowsBySearch, ShowType } from "../API/index";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useContext } from "react";
 import { useSearchParams } from "react-router-dom";
 import { initializeApp } from "firebase/app";
 import { config } from "../../config/config";
-import { getDatabase, onChildAdded, ref, set, update, onValue, } from "firebase/database";
+import { getDatabase, ref, onValue } from "firebase/database";
 import { getAuth } from "firebase/auth";
 import SearchCards from "./SearchCards";
+import { UserContext } from "../../context/UserContext";
 
 function Search() {
- 
- 
   const [currentSearch, setCurrentSearch] = useSearchParams();
   const [shows, setShows] = useState<ShowType[]>([]);
+  const { user }: any = useContext(UserContext);
 
   const handleOnSearchChange = useCallback(
     (query: string) => {
       setCurrentSearch({ search: query });
-      localStorage.setItem('query', query)
-      
+      localStorage.setItem("query", query);
     },
     [setCurrentSearch]
   );
@@ -31,28 +30,27 @@ function Search() {
     );
   }, [currentSearch]);
 
-  const takeFavorites = ()=> {
+  const takeFavorites = () => {
     const auth = getAuth();
-  const app = initializeApp(config.firebaseConfig)
-  const uid = auth.currentUser?.uid
-  
-  const db = getDatabase(app);
-  const favoritesCount = ref(db, '/'+ uid + '/')
+    const app = initializeApp(config.firebaseConfig);
+    const uid = auth.currentUser?.uid;
 
-  onValue(favoritesCount, (snapshot: any) => {
-    const data = snapshot.val()
-   
-    const favorites:any = [];
-    for (const iterator in data) {
-      favorites.push(data[iterator])
-    }
-    const favoriteStorage = JSON.stringify(favorites);
-    localStorage.setItem('favorites', favoriteStorage)})
-    
-  }
+    const db = getDatabase(app);
+    const favoritesCount = ref(db, "/" + uid + "/");
+
+    onValue(favoritesCount, (snapshot: any) => {
+      const data = snapshot.val();
+
+      const favorites: any = [];
+      for (const iterator in data) {
+        favorites.push(data[iterator]);
+      }
+      const favoriteStorage = JSON.stringify(favorites);
+      localStorage.setItem("favorites", favoriteStorage);
+    });
+  };
 
   useEffect(() => {
-    
     takeFavorites();
     const currentSearchStr = currentSearch?.get("search")?.trim();
     if (
@@ -62,34 +60,32 @@ function Search() {
     ) {
       handleOnSearch();
     }
-    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-    
-    const name: any = localStorage.getItem('user')
-    
-  
-    return (
-      <>
-        <div className="py-3 dark:text-white">
-          <div className="py-3">
-            <p className="text-lg text-center">
-              Hello,{" "}
-              <i className="text-xl font-bold underline decoration-indigo-500">
-                {JSON.parse(name).displayName}
-              </i>{" "}
-            </p>
-            <p className="text-base text-center">
-              search for a movie, see detail and add to your favorites
-            </p>
-          </div>
-          <label
-            htmlFor="first_name"
-            className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-          >
-            Search
-          </label>
-        <div className="grid px-4">  <div className="relative">
+
+  return (
+    <>
+      <div className="py-3 dark:text-white">
+        <div className="py-3">
+          <p className="text-lg text-center">
+            Hello,
+            <i className="text-xl font-bold underline decoration-indigo-500">
+              {user.displayName}
+            </i>
+          </p>
+          <p className="text-base text-center">
+            search for a movie, see detail and add to your favorites
+          </p>
+        </div>
+        <label
+          htmlFor="first_name"
+          className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+        >
+          Search
+        </label>
+        <div className="grid px-4">
+          <div className="relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <svg
                 aria-hidden="true"
@@ -123,24 +119,21 @@ function Search() {
             >
               Search
             </button>
-          </div></div>
+          </div>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 px-4">
-          {shows.map((el) => (
-            <SearchCards
-          key={el.id}
-          id={el.id}
-          title={el.title}
-          image={el.image}
-        ></SearchCards>
-            
-          ))}
-        </div>
-      </>
-    );
-  }
-  
-  export default Search;
-  
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 px-4">
+        {shows.map((el) => (
+          <SearchCards
+            key={el.id}
+            id={el.id}
+            title={el.title}
+            image={el.image}
+          ></SearchCards>
+        ))}
+      </div>
+    </>
+  );
+}
 
-
+export default Search;

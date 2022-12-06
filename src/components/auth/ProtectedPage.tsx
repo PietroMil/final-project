@@ -1,12 +1,19 @@
-import { Navigate } from 'react-router-dom';
+import { useContext } from "react";
+import { Navigate } from "react-router-dom";
+import { UserContext } from "../../context/UserContext";
 
-const ProtectedRoute = ({user, children }:any) => {
-const { uid } = user
-    if (!uid) {
-      return <Navigate to="/login" replace />;
-    }
+const ProtectedRoute = ({ children }: any) => {
+  const user: any = useContext(UserContext);
 
-    return children;
-  };
+  if (user.isLoading && !user.user) {
+    return <>Loading...</>;
+  }
 
-  export default ProtectedRoute;
+  if (!user.user && !user.isLoading) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
+};
+
+export default ProtectedRoute;

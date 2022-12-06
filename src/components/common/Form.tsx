@@ -1,20 +1,22 @@
 import Button from "./Button";
 import { Link, useLocation } from "react-router-dom";
 
-
 export interface InputFormProps {
-  title: string,
-  setPassword: Function,
-  setEmail: Function,
-  setError: string,
-  handleAction: Function
+  title: string;
+  setPassword: Function;
+  setEmail: Function;
+  setError: string;
+  handleAction: Function;
 }
 
-function Form({ title, setPassword, setEmail, setError, handleAction }: InputFormProps) {
+function Form({
+  title,
+  setPassword,
+  setEmail,
+  setError,
+  handleAction,
+}: InputFormProps) {
   const location = useLocation();
-
-  
-  
 
   return (
     <>
@@ -88,8 +90,6 @@ function Form({ title, setPassword, setEmail, setError, handleAction }: InputFor
       >
         {setError}
       </div>
-
- 
     </>
   );
 }

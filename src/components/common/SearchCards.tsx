@@ -6,19 +6,19 @@ import { getDatabase, ref, update, remove } from "firebase/database";
 import { getAuth } from "firebase/auth";
 
 function SearchCards({ id, title, image }: any) {
-  const auth = getAuth();
   const app = initializeApp(config.firebaseConfig);
+  const auth = getAuth(app);
   const db = getDatabase(app);
   const [isFavorites, setIsfavorites] = useState<boolean>(false);
 
-  const storage = JSON.parse(localStorage.getItem("favorites") || "");
+  const storage = JSON.parse(localStorage.getItem("favorites")!);
 
   const handleFavorites = (
     id: number,
     name: string,
     img: string | "undefined"
   ) => {
-    update(ref(db, `/${auth.currentUser?.uid}/id`), {
+    update(ref(db, `/${auth.currentUser?.uid}/` + id), {
       id: id,
       title: name,
       imgUrl: img,
@@ -27,17 +27,18 @@ function SearchCards({ id, title, image }: any) {
   };
 
   const handleRemoveFavorites = (id: number) => {
-    remove(ref(db, `/${auth.currentUser?.uid}/id`));
+    remove(ref(db, `/${auth.currentUser?.uid}/` + id));
     setIsfavorites(false);
   };
 
   useEffect(() => {
-    storage.forEach((element: any) => {
-      if (element.id === id) {
-        setIsfavorites(true);
-        console.log(element.id);
-      }
-    });
+    if (storage) {
+      storage.forEach((element: any) => {
+        if (element.id === id) {
+          setIsfavorites(true);
+        }
+      });
+    }
   }, [id, storage]);
 
   return (
@@ -46,8 +47,6 @@ function SearchCards({ id, title, image }: any) {
         <Link key={id} to={id.toString()} style={{ textDecoration: "none" }}>
           <img className="rounded-t-lg" src={image || "/logo192.png"} alt="" />
         </Link>
-        {/* <p>{id}</p> */}
-
         {isFavorites ? (
           <button onClick={() => handleRemoveFavorites(id)}>
             <svg
