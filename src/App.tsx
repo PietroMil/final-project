@@ -48,7 +48,7 @@ const App: React.FunctionComponent<InputAppProps> = () => {
           }
         />
 
-        <Route path="/favorites" element={<Favorites />} />
+        <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
       </Routes>
