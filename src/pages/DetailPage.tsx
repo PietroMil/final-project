@@ -23,7 +23,7 @@ const DetailPage = () => {
 
   return !!data ? (
     <>
-      <div className=" md:h-screen grid content-center justify-center  ">
+      <div className=" md:h-screen grid w-10/12 m-auto content-center justify-center  ">
         <div className="flex flex-col items-center bg-white border rounded-lg shadow-md md:flex-row md:w-full hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 p-4">
           <img
             className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg"
