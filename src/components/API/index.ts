@@ -17,6 +17,12 @@ export type ShowType = {
     image?: string;
 }
 
+export type ShowFavorites = {
+    id: number,
+    imgUrl?: string,
+    title: string
+}
+
 type ShowDetailResType = {
     id: number;
     name: string;

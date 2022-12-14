@@ -1,33 +1,24 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { initializeApp } from "firebase/app";
-import { config } from "../../config/config";
-import { getDatabase, ref, update, remove } from "firebase/database";
-import { getAuth } from "firebase/auth";
+import useFavorites from "../../hooks/useFavorites";
 
 function SearchCards({ id, title, image }: any) {
-  const app = initializeApp(config.firebaseConfig);
-  const auth = getAuth(app);
-  const db = getDatabase(app);
+
   const [isFavorites, setIsfavorites] = useState<boolean>(false);
 
-  const storage = JSON.parse(localStorage.getItem("favorites")!);
+  const [storage, addFavorite, removeFavorite] = useFavorites()
 
   const handleFavorites = (
     id: number,
     name: string,
     img: string | "undefined"
   ) => {
-    update(ref(db, `/${auth.currentUser?.uid}/` + id), {
-      id: id,
-      title: name,
-      imgUrl: img,
-    });
+  addFavorite(id, name, img)
     setIsfavorites(true);
   };
 
   const handleRemoveFavorites = (id: number) => {
-    remove(ref(db, `/${auth.currentUser?.uid}/` + id));
+    removeFavorite(id)
     setIsfavorites(false);
   };
 

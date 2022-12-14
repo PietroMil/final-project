@@ -1,10 +1,6 @@
 import { getShowsBySearch, ShowType } from "../API/index";
 import { useCallback, useEffect, useState, useContext } from "react";
 import { useSearchParams } from "react-router-dom";
-import { initializeApp } from "firebase/app";
-import { config } from "../../config/config";
-import { getDatabase, ref, onValue } from "firebase/database";
-import { getAuth } from "firebase/auth";
 import SearchCards from "./SearchCards";
 import { UserContext } from "../../context/UserContext";
 
@@ -30,28 +26,10 @@ function Search() {
     );
   }, [currentSearch]);
 
-  const takeFavorites = () => {
-    const auth = getAuth();
-    const app = initializeApp(config.firebaseConfig);
-    const uid = auth.currentUser?.uid;
 
-    const db = getDatabase(app);
-    const favoritesCount = ref(db, "/" + uid + "/");
-
-    onValue(favoritesCount, (snapshot: any) => {
-      const data = snapshot.val();
-
-      const favorites: any = [];
-      for (const iterator in data) {
-        favorites.push(data[iterator]);
-      }
-      const favoriteStorage = JSON.stringify(favorites);
-      localStorage.setItem("favorites", favoriteStorage);
-    });
-  };
 
   useEffect(() => {
-    takeFavorites();
+
     const currentSearchStr = currentSearch?.get("search")?.trim();
     if (
       !!currentSearchStr &&

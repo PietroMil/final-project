@@ -1,26 +1,14 @@
 import ProtectedRoute from "../components/auth/ProtectedPage";
 import { Link, useNavigate } from "react-router-dom";
-import { initializeApp } from "firebase/app";
-import { config } from "../config/config";
-import { getDatabase, remove, ref } from "firebase/database";
-import { getAuth } from "firebase/auth";
+import useFavorites from "../hooks/useFavorites";
 
 const Favorites = () => {
-  const storage = JSON.parse(localStorage.getItem("favorites")!);
+  const [storage, , removeFavorite] = useFavorites()
 
   const navigate = useNavigate();
-  const auth = getAuth();
 
-  const app = initializeApp(config.firebaseConfig);
-  const db = getDatabase(app);
-
-  const handleRemoveFavorites = (id: number, index: number) => {
-    const existingEntries = storage;
-    existingEntries.splice(index, 1);
-    localStorage.setItem("favorites", JSON.stringify(existingEntries));
-
-    navigate("/favorites");
-    remove(ref(db, `/${auth.currentUser?.uid}/` + id));
+  const handleRemoveFavorites = (id: number) => {
+    removeFavorite(id)
   };
 
   return (
@@ -39,7 +27,7 @@ const Favorites = () => {
         </div>
         <div className="p-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
           {storage
-            ? storage.map((el: any, index: any) => (
+            ? storage.map((el: any) => (
                 <div
                   key={el.id}
                   className={
@@ -64,7 +52,7 @@ const Favorites = () => {
                   </div>
                   <button
                     className="cursor-pointer inline-block text-sm px-4 py-2 leading-none border rounded text-black border-black hover:border-transparent hover:text-red-500 hover:bg-white mt-4 lg:mt-0"
-                    onClick={() => handleRemoveFavorites(el.id, index)}
+                    onClick={() => handleRemoveFavorites(el.id)}
                   >
                     DELETE
                   </button>
