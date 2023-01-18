@@ -10,6 +10,7 @@ import Favorites from "./pages/Favorites";
 import ProtectedRoute from "./components/auth/ProtectedPage";
 import { selecTheme } from "./theme/theme.slice";
 import { useAppSelector } from "./store/hooks";
+import Watching from "./pages/Watching";
 
 initializeApp(config.firebaseConfig);
 
@@ -49,6 +50,7 @@ const App: React.FunctionComponent<InputAppProps> = () => {
         />
 
         <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
+        <Route path="/watching" element={<ProtectedRoute><Watching /></ProtectedRoute>} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
       </Routes>

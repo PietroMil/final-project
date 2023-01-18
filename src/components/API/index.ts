@@ -50,7 +50,7 @@ export type ShowDetailType = {
     summary?: string;
 }
 
-//faccio un trim di una queri e se è vuoto ritorno un array vuoto
+//faccio un trim di una query e se è vuoto ritorno un array vuoto
 export const getShowsBySearch = async (query: string) => {
     query = query.trim();
 

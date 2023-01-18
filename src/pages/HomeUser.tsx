@@ -97,6 +97,11 @@ const HomeUser: React.FunctionComponent<InputHomePageProps> = () => {
                     Favorites
                   </button>
                 </li>
+                <li className="text-white text-xl my-2 uppercase">
+                  <button onClick={() => navigate("/watching")}>
+                    Watching
+                  </button>
+                </li>
                 <li>
                   <button
                     onClick={() => {
@@ -117,6 +122,9 @@ const HomeUser: React.FunctionComponent<InputHomePageProps> = () => {
           <ul className="text-white DESKTOP-MENU hidden space-x-8 lg:flex">
             <li>
               <button onClick={() => navigate("/favorites")}>Favorites</button>
+            </li>
+            <li>
+              <button onClick={() => navigate("/watching")}>Watching</button>
             </li>
             <li>
               <button
