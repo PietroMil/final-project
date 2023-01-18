@@ -33,7 +33,7 @@ const RegisterPage: React.FunctionComponent<InputLoginProps> = (props) => {
   };
 
   return (
-    <div>
+    <div className="m-2">
       <div>
         <div className="w-full max-w-sm mt-6 m-auto">
           <div className="md:flex md:items-center mb-6">

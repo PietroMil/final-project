@@ -42,7 +42,7 @@ const LoginPage: React.FunctionComponent<InputLoginProps> = (props) => {
   };
 
   return (
-    <div>
+    <div className="m-2">
       <div>
         <Form
           title="Login"
